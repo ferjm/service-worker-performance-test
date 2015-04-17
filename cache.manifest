@@ -1,0 +1,9 @@
+CACHE MANIFEST
+#v1
+index.html
+manifest.webapp
+sw.js
+test.js
+img/httpcache.jpg
+img/icon-128.png
+img/swcache.jpg
