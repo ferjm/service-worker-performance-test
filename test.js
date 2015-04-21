@@ -11,12 +11,10 @@ navigator.serviceWorker.register('sw.js', {
 });
 
 navigator.serviceWorker.ready.then(function(sw) {
-  console.log(window.performance.now() + ' READY');
   sw.active.postMessage('ready');
 });
 
 navigator.serviceWorker.onmessage = function(msg) {
-  console.log('MESSAGE RECEIVED');
   if (msg.type != 'mark') {
     return;
   }

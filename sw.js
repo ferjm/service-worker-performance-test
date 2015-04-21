@@ -33,7 +33,6 @@ function mark(mark) {
     debug('Sending ' + JSON.stringify(msg));
     c.postMessage(msg);
   }).catch(function() {
-    console.log('Oh crap! no client yet', msg);
     _msgQueue.push(msg);
   });
 }
@@ -80,18 +79,6 @@ this.addEventListener('fetch', function(e) {
 });
 
 this.addEventListener('message', function(msg) {
-  debug('GOT MESSAGE ' + msg.data);
-
-  client().then(function(c) {
-    if (_msgQueue.length) {
-      for (var i = 0; i < _msgQueue.length; i++) {
-        var queuedMsg = _msgQueue.pop();
-        debug('Sending ' + JSON.stringify(queuedMsg));
-        c.postMessage(queuedMsg);
-      }
-    }
-  });
-/*
   if (_msgQueue.length) {
     for (var i = 0; i < _msgQueue.length; i++) {
       var queuedMsg = _msgQueue.pop();
@@ -99,5 +86,4 @@ this.addEventListener('message', function(msg) {
       msg.source.postMessage(queuedMsg);
     }
   }
-*/
 });
