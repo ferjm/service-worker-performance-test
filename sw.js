@@ -1,10 +1,10 @@
 function debug(msg) {
-  console.log('Service Worker', msg);
+  console.log(performance.now() + ' Service Worker ' + msg);
 }
 
 mark('service-worker-loaded');
 
-debug('Loaded', performance.now());
+debug('Loaded');
 
 var _client;
 var _msgQueue = [];
@@ -13,7 +13,7 @@ function client() {
   if (_client) {
     return Promise.resolve(_client);
   }
-  return clients.matchAll().then(function(clients) {
+  return self.clients.matchAll().then(function(clients) {
     if (!clients.length) {
       return Promise.reject();
     }
@@ -30,12 +30,6 @@ function mark(mark) {
   };
 
   client().then(function(c) {
-    if (_msgQueue.length) {
-      for (var i = 0; i < _msgQueue.length; i++) {
-        debug('QUEUE ' + JSON.stringify);
-        c.postMessage(_msgQueue.pop());
-      }
-    }
     debug('Sending ' + JSON.stringify(msg));
     c.postMessage(msg);
   }).catch(function() {
@@ -83,4 +77,18 @@ this.addEventListener('fetch', function(e) {
       return response;
     })
   );
+});
+
+this.addEventListener('message', function(msg) {
+  debug('GOT MESSAGE' + msg.data);
+  // msg.ports
+  client().then(function(c) {
+    if (_msgQueue.length) {
+      for (var i = 0; i < _msgQueue.length; i++) {
+        var queuedMsg = _msgQueue.pop();
+        debug(window.performance.now() + ' Sending ' + JSON.stringify(queuedMsg));
+        c.postMessage(queuedMsg);
+      }
+    }
+  });
 });
