@@ -95,7 +95,7 @@ this.addEventListener('message', function(msg) {
     for (var i = 0; i < _msgQueue.length; i++) {
       var queuedMsg = _msgQueue.pop();
       debug('Sending ' + JSON.stringify(queuedMsg));
-      msg.ports[0].postMessage(queuedMsg);
+      msg.source.postMessage(queuedMsg);
     }
   }
 });
