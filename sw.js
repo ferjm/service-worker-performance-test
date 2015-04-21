@@ -1,4 +1,5 @@
 var _client;
+var _msgQueue = [];
 
 function client() {
   if (_client) {
@@ -14,14 +15,22 @@ function client() {
 }
 
 function mark(mark) {
+  var msg = {
+    type: 'mark',
+    sentAt: performance.now(),
+    mark: mark
+  };
+
   client().then(function(c) {
-    c.postMessage({
-      type: 'mark',
-      sentAt: performance.now(),
-      mark: mark
-    });
+    if (_msgQueue.length) {
+      for (var i = 0; i < _msgQueue.length; i++) {
+       c.postMessage(_msgQueue.pop());
+      }
+    }
+    c.postMessage(msg);
   }).catch(function() {
-    console.log('Oh crap! no client');
+    console.log('Oh crap! no client yet');
+    _msgQueue.push(msg);
   });
 }
 
