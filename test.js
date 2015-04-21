@@ -9,10 +9,10 @@ navigator.serviceWorker.register('sw.js').then(function(worker) {
 });
 
 navigator.serviceWorker.onmessage = function(msg) {
+  console.log(JSON.stringify(msg));
   if (msg.type != 'mark') {
     return;
   }
-  console.log(JSON.stringify(msg));
   // XXX remove delta
   window.performance.mark(msg.mark);
 };

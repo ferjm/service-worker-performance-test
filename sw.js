@@ -1,3 +1,11 @@
+function debug(msg) {
+  console.log('Service Worker', msg);
+}
+
+mark('service-worker-loaded');
+
+debug('Loaded', performance.now());
+
 var _client;
 var _msgQueue = [];
 
@@ -24,23 +32,17 @@ function mark(mark) {
   client().then(function(c) {
     if (_msgQueue.length) {
       for (var i = 0; i < _msgQueue.length; i++) {
-       c.postMessage(_msgQueue.pop());
+        debug('QUEUE ' + JSON.stringify);
+        c.postMessage(_msgQueue.pop());
       }
     }
+    debug('Sending ' + JSON.stringify(msg));
     c.postMessage(msg);
   }).catch(function() {
-    console.log('Oh crap! no client yet');
+    console.log('Oh crap! no client yet', msg);
     _msgQueue.push(msg);
   });
 }
-
-mark('service-worker-loaded');
-
-function debug(msg) {
-  console.log('Service Worker', msg);
-}
-
-debug('Loaded', performance.now());
 
 this.addEventListener('install', function(e) {
   mark('service-worker-oninstall');
