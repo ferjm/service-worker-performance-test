@@ -81,7 +81,7 @@ this.addEventListener('fetch', function(e) {
 
 this.addEventListener('message', function(msg) {
   debug('GOT MESSAGE ' + msg.data);
-  /*
+
   client().then(function(c) {
     if (_msgQueue.length) {
       for (var i = 0; i < _msgQueue.length; i++) {
@@ -90,7 +90,8 @@ this.addEventListener('message', function(msg) {
         c.postMessage(queuedMsg);
       }
     }
-  });*/
+  });
+/*
   if (_msgQueue.length) {
     for (var i = 0; i < _msgQueue.length; i++) {
       var queuedMsg = _msgQueue.pop();
@@ -98,4 +99,5 @@ this.addEventListener('message', function(msg) {
       msg.source.postMessage(queuedMsg);
     }
   }
+*/
 });
