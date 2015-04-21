@@ -1,4 +1,12 @@
-performance.mark('service-worker-loaded');
+function mark(mark) {
+  postMessage({
+    type: 'mark',
+    sentAt: performance.now(),
+    mark: mark
+  });
+}
+
+mark('service-worker-loaded');
 
 function debug(msg) {
   console.log('Service Worker', msg);
@@ -7,7 +15,7 @@ function debug(msg) {
 debug('Loaded', performance.now());
 
 this.addEventListener('install', function(e) {
-  performance.mark('service-worker-oninstall');
+  mark('service-worker-oninstall');
   debug('oninstall');
   e.waitUntil(
     caches.open('cache').then(function(cache) {
@@ -23,7 +31,7 @@ this.addEventListener('install', function(e) {
 });
 
 this.addEventListener('activate', function() {
-  performance.mark('service-worker-onactivate');
+  mark('service-worker-onactivate');
 });
 
 this.addEventListener('fetch', function(e) {
