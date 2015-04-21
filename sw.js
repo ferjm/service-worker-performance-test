@@ -44,7 +44,7 @@ this.addEventListener('install', function(e) {
   e.waitUntil(
     caches.open('cache').then(function(cache) {
       return cache.addAll(['/img/swcache.jpg']).then(function() {
-        debug('Image cached', performance.now());
+        debug('Image cached');
         return Promise.resolve();
       }).catch(function(e) {
         debug('Error: ' + e);
@@ -80,15 +80,22 @@ this.addEventListener('fetch', function(e) {
 });
 
 this.addEventListener('message', function(msg) {
-  debug('GOT MESSAGE' + msg.data);
-  // msg.ports
+  debug('GOT MESSAGE ' + msg.data);
+  /*
   client().then(function(c) {
     if (_msgQueue.length) {
       for (var i = 0; i < _msgQueue.length; i++) {
         var queuedMsg = _msgQueue.pop();
-        debug(window.performance.now() + ' Sending ' + JSON.stringify(queuedMsg));
+        debug('Sending ' + JSON.stringify(queuedMsg));
         c.postMessage(queuedMsg);
       }
     }
-  });
+  });*/
+  if (_msgQueue.length) {
+    for (var i = 0; i < _msgQueue.length; i++) {
+      var queuedMsg = _msgQueue.pop();
+      debug('Sending ' + JSON.stringify(queuedMsg));
+      msg.ports[0].postMessage(queuedMsg);
+    }
+  }
 });
