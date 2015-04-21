@@ -1,8 +1,27 @@
+var _client;
+
+function client() {
+  if (_client) {
+    return Promise.resolve(_client);
+  }
+  return clients.matchAll().then(function(clients) {
+    if (!clients.length) {
+      return Promise.reject();
+    }
+    _client = clients[0];
+    return _client;
+  });
+}
+
 function mark(mark) {
-  postMessage({
-    type: 'mark',
-    sentAt: performance.now(),
-    mark: mark
+  client().then(function(c) {
+    c.postMessage({
+      type: 'mark',
+      sentAt: performance.now(),
+      mark: mark
+    });
+  }).catch(function() {
+    console.log('Oh crap! no client');
   });
 }
 
