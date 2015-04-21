@@ -15,7 +15,8 @@ navigator.serviceWorker.ready.then(function(sw) {
 });
 
 navigator.serviceWorker.onmessage = function(msg) {
-  if (msg.type != 'mark') {
+  console.log('GOT MESSAGE ', JSON.stringify(msg.data));
+  if (msg.data.type != 'mark') {
     return;
   }
   // XXX remove delta
