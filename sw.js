@@ -67,10 +67,14 @@ this.addEventListener('activate', function() {
 this.addEventListener('fetch', function(e) {
   debug('onfetch ' + e.request.url);
 
+  mark('service-worker-open-cache');
   e.respondWith(
     caches.open('cache').then(function(cache) {
+      mark('service-worker-cache-opened');
+      mark('service-worker-cache-match-start');
       return cache.match(e.request.url);
     }).then(function(response) {
+      mark('service-worker-cache-match-result');
       if (!response) {
         debug(e.request.url + ' not in the cache');
         return fetch(e.request.clone());
