@@ -4,15 +4,12 @@ function debug(msg) {
 
 mark('service-worker-loaded');
 
-debug('Loaded');
-
 var _client;
 var _ready;
 var _msgQueue = [];
 
 function client() {
   if (_client) {
-    debug('CLIENT ' + _client);
     return Promise.resolve(_client);
   }
   return self.clients.matchAll().then(function(clients) {
@@ -32,7 +29,6 @@ function mark(mark) {
   };
 
   client().then(function(c) {
-    debug('Sending ' + JSON.stringify(msg) + ' to ' + c);
     if (!_ready) {
       _msgQueue.push(msg);
       return;
@@ -45,11 +41,9 @@ function mark(mark) {
 
 this.addEventListener('install', function(e) {
   mark('service-worker-oninstall');
-  debug('oninstall');
   e.waitUntil(
     caches.open('cache').then(function(cache) {
       return cache.addAll(['/img/swcache.jpg']).then(function() {
-        debug('Image cached');
         return Promise.resolve();
       }).catch(function(e) {
         debug('Error: ' + e);
@@ -64,8 +58,6 @@ this.addEventListener('activate', function() {
 });
 
 this.addEventListener('fetch', function(e) {
-  debug('onfetch ' + e.request.url);
-
   mark('service-worker-open-cache');
   e.respondWith(
     caches.open('cache').then(function(cache) {
@@ -75,10 +67,8 @@ this.addEventListener('fetch', function(e) {
     }).then(function(response) {
       mark('service-worker-cache-match-result');
       if (!response) {
-        debug(e.request.url + ' not in the cache');
         return fetch(e.request.clone());
       }
-      debug(e.request.url + ' is in the cache');
       return response;
     })
   );
@@ -91,8 +81,6 @@ this.addEventListener('message', function(msg) {
   if (_msgQueue.length) {
     for (var i = 0; i < _msgQueue.length; i++) {
       var queuedMsg = _msgQueue.pop();
-      debug('Sending ' + JSON.stringify(queuedMsg) + ' to source' +
-            msg.source);
       msg.source.postMessage(queuedMsg);
     }
   }
