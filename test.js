@@ -20,5 +20,5 @@ navigator.serviceWorker.onmessage = function(msg) {
     return;
   }
   // XXX remove delta
-  window.performance.mark(msg.mark);
+  window.performance.mark(msg.data.mark);
 };
