@@ -1,5 +1,5 @@
 {
-  "name": "SW perf test",
+  "name": "swperftest",
   "description": "Service Workers B2G performance test",
   "launch_path": "/index.html",
   "appcache_path": "/cache.manifest",
