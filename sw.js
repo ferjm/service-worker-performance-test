@@ -11,6 +11,7 @@ var _msgQueue = [];
 
 function client() {
   if (_client) {
+    debug('CLIENT ' + _client);
     return Promise.resolve(_client);
   }
   return self.clients.matchAll().then(function(clients) {
@@ -30,7 +31,7 @@ function mark(mark) {
   };
 
   client().then(function(c) {
-    debug('Sending ' + JSON.stringify(msg));
+    debug('Sending ' + JSON.stringify(msg) + ' to ' + c);
     c.postMessage(msg);
   }).catch(function() {
     _msgQueue.push(msg);
@@ -82,7 +83,8 @@ this.addEventListener('message', function(msg) {
   if (_msgQueue.length) {
     for (var i = 0; i < _msgQueue.length; i++) {
       var queuedMsg = _msgQueue.pop();
-      debug('Sending ' + JSON.stringify(queuedMsg));
+      debug('Sending ' + JSON.stringify(queuedMsg) + ' to source' +
+            msg.source);
       msg.source.postMessage(queuedMsg);
     }
   }
