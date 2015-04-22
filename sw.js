@@ -7,6 +7,7 @@ mark('service-worker-loaded');
 debug('Loaded');
 
 var _client;
+var _ready;
 var _msgQueue = [];
 
 function client() {
@@ -32,6 +33,10 @@ function mark(mark) {
 
   client().then(function(c) {
     debug('Sending ' + JSON.stringify(msg) + ' to ' + c);
+    if (!_ready) {
+      _msgQueue.push(msg);
+      return;
+    }
     c.postMessage(msg);
   }).catch(function() {
     _msgQueue.push(msg);
@@ -80,6 +85,9 @@ this.addEventListener('fetch', function(e) {
 });
 
 this.addEventListener('message', function(msg) {
+  if (!_ready) {
+    _ready = true;
+  }
   if (_msgQueue.length) {
     for (var i = 0; i < _msgQueue.length; i++) {
       var queuedMsg = _msgQueue.pop();
