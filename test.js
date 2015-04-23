@@ -11,6 +11,9 @@ navigator.serviceWorker.register('sw.js', {
 navigator.serviceWorker.ready.then(function(sw) {
   sw.active.postMessage('ready');
   // This sucks, but we need a way to finish the test.
+  setTimeout(function() {
+    window.performance.mark('fullyLoaded');
+  }, 2000);
 });
 
 navigator.serviceWorker.onmessage = function(msg) {
@@ -19,6 +22,4 @@ navigator.serviceWorker.onmessage = function(msg) {
   }
   // XXX remove delta
   window.performance.mark(msg.data.mark);
-
-  window.performance.mark('fullyLoaded');
 };
