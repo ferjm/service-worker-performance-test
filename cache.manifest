@@ -1,5 +1,6 @@
 CACHE MANIFEST
-#v4
+#v5
+#
 index.html
 manifest.webapp
 sw.js

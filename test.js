@@ -1,6 +1,6 @@
 window.performance.mark('service-worker-registering');
 
-navigator.serviceWorker.register('sw.js', {
+/*navigator.serviceWorker.register('sw.js', {
   scope: './'
 }).then(function(worker) {
   window.performance.mark('service-worker-registered');
@@ -22,4 +22,6 @@ navigator.serviceWorker.onmessage = function(msg) {
   }
   // XXX remove delta
   window.performance.mark(msg.data.mark);
-};
+};*/
+
+window.performance.mark('fullyLoaded');
