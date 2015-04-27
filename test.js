@@ -24,4 +24,8 @@ navigator.serviceWorker.onmessage = function(msg) {
   window.performance.mark(msg.data.mark);
 };*/
 
+window.performance.mark('visuallyLoaded');
+window.performance.mark('navigationLoaded');
+window.performance.mark('navigationInteractive');
+window.performance.mark('contentInteractive');
 window.performance.mark('fullyLoaded');
